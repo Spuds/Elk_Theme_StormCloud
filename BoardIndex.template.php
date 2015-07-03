@@ -185,7 +185,7 @@ function template_ic_recent_posts()
 			// This is really not the way to go about this :P
 			if (empty($user_profile[$post['poster']['id']]['avatar']))
 			{
-				loadMemberData([$post['poster']['id']]);
+				loadMemberData($post['poster']['id']);
 				$user_profile[$post['poster']['id']]['avatar'] = determineAvatar($user_profile[$post['poster']['id']]);
 			}
 
