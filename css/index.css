@@ -1013,7 +1013,6 @@ a.bbc_link {
 	top: 100%;
 	left: -9999px;
 	z-index: 90;
-	margin: 0;
 	padding: 0.6em;
 	width: 18.4em;
 	margin: 0 1em 0;
@@ -3247,7 +3246,6 @@ dl.merge_topic dd {
 .topic .post {
 	margin: 0 12px;
 	min-height: 80px;
-	height: auto;
 	height: 80px;
 }
 .topic .mod_icons {
@@ -4794,9 +4792,6 @@ dl.no_members {
 	}
 	.linktree .board_moderators {
 		display: none;
-	}
-	.statsbar .bar {
-		max-width: 12em;
 	}
 	.signature {
 		display: none;

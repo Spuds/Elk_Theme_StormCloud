@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-	<theme-info xmlns="http://www.elkarte.net/xml/theme-info" xmlns:elk="http://www.elkarte.net/">
+	<theme-info xmlns="http://www.elkarte.net/site/theme-info" xmlns:elk="http://www.elkarte.net/">
 		<!-- For the id, always use something unique - put your name, a colon, and then the package name. -->
 		<id>spuds:StormCloud</id>
 		<version>1.0</version>
