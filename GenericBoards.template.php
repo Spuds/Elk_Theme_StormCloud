@@ -11,7 +11,7 @@
  * copyright:	2011 Simple Machines (http://www.simplemachines.org)
  * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @version 1.0
+ * @version 1.0.7
  *
  */
 
@@ -29,7 +29,7 @@ function optimizeBoardsSubdivision($categories, $total_boards)
 	$num_groups = 2;
 	$optimal_boards = round($total_boards / $num_groups);
 	$groups = array(0 => array());
-	$group_totals = array(0 => 0);
+	$group_totals = array(0 => 0, 1 => 0);
 	$current_streak = 0;
 	$current_group = 0;
 
@@ -114,7 +114,7 @@ function template_list_boards($boards, $id)
 		// Is it a redirection board?
 		elseif ($board['is_redirect'])
 			echo '
-							<span class="board_icon redirect_board" title="*"></span>';
+							<span class="board_icon redirect_board" title="', sprintf($txt['redirect_board_to'], Util::htmlspecialchars($board['name'])), '"></span>';
 
 		// No new posts at all! The agony!!
 		else
