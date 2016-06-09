@@ -15,7 +15,7 @@
  *
  */
 
- /**
+/**
  * This template is, perhaps, the most important template in the theme. It
  * contains the main template layer that displays the header and footer of
  * the forum, namely with body_above and body_below. It also contains the
@@ -202,7 +202,7 @@ function template_html_above()
 	echo '
 </head>
 <body id="', $context['browser_body_id'], '" class="action_', !empty($context['current_action']) ? htmlspecialchars($context['current_action'], ENT_COMPAT, 'UTF-8') : (!empty($context['current_board']) ?
-					'messageindex' : (!empty($context['current_topic']) ? 'display' : 'home')), !empty($context['current_board']) ? ' board_' . htmlspecialchars($context['current_board'], ENT_COMPAT, 'UTF-8') : '', '">';
+		'messageindex' : (!empty($context['current_topic']) ? 'display' : 'home')), !empty($context['current_board']) ? ' board_' . htmlspecialchars($context['current_board'], ENT_COMPAT, 'UTF-8') : '', '">';
 }
 
 /**
@@ -211,6 +211,7 @@ function template_html_above()
 function template_body_above()
 {
 	global $context, $settings, $scripturl, $txt;
+
 
 	// The sliding login panel
 	if (!empty($context['show_login_bar']))
@@ -259,11 +260,11 @@ function template_body_above()
 }
 
 /**
- If the user is logged in, display the time, or a maintenance warning for admins.
- @todo - TBH I always intended the time/date to be more or less a place holder for more important things.
- The maintenance mode warning for admins is an obvious one, but this could also be used for moderation notifications.
- I also assumed this would be an obvious place for sites to put a string of icons to link to their FB, Twitter, etc.
- This could still be done via conditional, so that administration and moderation notices were still active when applicable.
+If the user is logged in, display the time, or a maintenance warning for admins.
+@todo - TBH I always intended the time/date to be more or less a place holder for more important things.
+The maintenance mode warning for admins is an obvious one, but this could also be used for moderation notifications.
+I also assumed this would be an obvious place for sites to put a string of icons to link to their FB, Twitter, etc.
+This could still be done via conditional, so that administration and moderation notices were still active when applicable.
  */
 function template_login_bar()
 {
@@ -294,11 +295,11 @@ function template_login_bar()
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 						<input type="hidden" name="', $context['login_token_var'], '" value="', $context['login_token'], '" />';
 
-		if (!empty($modSettings['enableOpenID']))
-			echo '
+	if (!empty($modSettings['enableOpenID']))
+		echo '
 						<a class="button_submit top_button" href="', $scripturl, '?action=login;openid"><img src="' . $settings['images_url'] . '/openid.png" title="' . $txt['openid'] . '" alt="' . $txt['openid'] . '" /></a>';
 
-		echo '
+	echo '
 					</form>
 				</div>
 			</div>
@@ -413,12 +414,12 @@ function template_body_below()
 		<div class="wrapper">
 			<ul>
 				<li class="copyright">',
-					theme_copyright(), '
+	theme_copyright(), '
 				</li>',
-				!empty($context['newsfeed_urls']['rss']) ? '<li>
+	!empty($context['newsfeed_urls']['rss']) ? '<li>
 					<a id="button_rss" href="' . $context['newsfeed_urls']['rss'] . '" class="rssfeeds new_win"><i class="largetext fa fa-rss"></i></a>
 				</li>' : '',
-			'</ul>';
+	'</ul>';
 
 	// Show the load time?
 	if ($context['show_load_time'])
