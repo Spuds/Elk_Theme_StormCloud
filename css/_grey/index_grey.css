@@ -2141,7 +2141,7 @@ div.bbc_footnotes .meaction {
 }
 
 /* Panel Tab/button */
-.tab {
+.paneltab {
 	background: #222;
 	border-radius: 0;
 	padding: 0 10px;
@@ -2152,11 +2152,11 @@ div.bbc_footnotes .meaction {
 	white-space: nowrap;
 }
 
-.tab a:hover {
-	color: #222;;
+.paneltab a:hover {
+	color: #222;
 }
 
-.tab a.open, .tab a.close {
+.paneltab a.open, .paneltab a.close {
 	cursor: pointer;
 	display: block;
 	width: 100px;
