@@ -206,6 +206,11 @@ function template_body_above()
 {
 	global $context, $settings, $scripturl, $txt;
 
+	// Go to top/bottom of page links and skipnav link for a11y.
+	echo '
+	<a id="top" href="#skipnav">', $txt['skip_nav'], '</a>
+	<a href="#top" id="gotop" title="', $txt['go_up'], '">&#8593;</a>
+	<a href="#bot" id="gobottom" title="', $txt['go_down'], '">&#8595;</a>';
 
 	// The sliding login panel
 	if (!empty($context['show_login_bar']))
@@ -228,12 +233,6 @@ function template_body_above()
 				<div id="siteslogan">' . $settings['site_slogan'] . '</div>', '
 			</div>
 		</div>
-	</div>';
-
-	// Go to top/bottom of page links and skipnav link for a11y.
-	echo '
-	<a id="top" href="#skipnav">', $txt['skip_nav'], '</a>
-
 	<div id="wrapper" class="wrapper">
 		<div id="menu_wrapper">
 			<div id="menu_nav" role="navigation">
