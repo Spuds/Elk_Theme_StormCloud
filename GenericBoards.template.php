@@ -5,13 +5,11 @@
  * @copyright ElkArte Forum contributors
  * @license   BSD http://opensource.org/licenses/BSD-3-Clause
  *
- * This software is a derived product, based on:
- *
- * Simple Machines Forum (SMF)
+ * This file contains code covered by:
  * copyright:	2011 Simple Machines (http://www.simplemachines.org)
  * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @version 1.0.7
+ * @version 1.1
  *
  */
 
@@ -85,12 +83,12 @@ function optimizeBoardsSubdivision($categories, $total_boards)
 /**
  * Main template for displaying the list of boards
  *
- * @param int $boards
+ * @param array $boards
  * @param string $id
  */
 function template_list_boards($boards, $id)
 {
-	global $context, $settings, $txt, $scripturl;
+	global $context, $txt, $scripturl;
 
 	echo '
 			<ul class="category_boards" id="', $id, '">';
@@ -103,59 +101,61 @@ function template_list_boards($boards, $id)
 	{
 		echo '
 				<li class="board_row', (!empty($board['children'])) ? ' parent_board' : '', $board['is_redirect'] ? ' board_row_redirect' : '', '" id="board_', $board['id'], '">
-					<div class="board_info">
-						<a class="icon_anchor" href="', ($board['is_redirect'] || $context['user']['is_guest'] ? $board['href'] : $scripturl . '?action=unread;board=' . $board['id'] . '.0;children'), '">';
+					<a class="icon_anchor" href="', ($board['is_redirect'] || $context['user']['is_guest'] ? $board['href'] : $scripturl . '?action=unread;board=' . $board['id'] . '.0;children'), '">';
 
 		// If the board or children is new, show an indicator.
 		if ($board['new'] || $board['children_new'])
 			echo '
-							<span class="board_icon ', $board['new'] ? 'on_board' : 'on2_board', '" title="', $txt['new_posts'], '"></span>';
+						<span class="board_icon ', $board['new'] ? 'i-board-new' : 'i-board-sub', '" title="', $txt['new_posts'], '"></span>';
 
 		// Is it a redirection board?
 		elseif ($board['is_redirect'])
 			echo '
-							<span class="board_icon redirect_board" title="', sprintf($txt['redirect_board_to'], Util::htmlspecialchars($board['name'])), '"></span>';
+						<span class="board_icon i-board-redirect" title="', sprintf($txt['redirect_board_to'], Util::htmlspecialchars($board['name'])), '"></span>';
 
 		// No new posts at all! The agony!!
 		else
 			echo '
-							<span class="board_icon off_board" title="', $txt['old_posts'], '"></span>';
+						<span class="board_icon i-board-off" title="', $txt['old_posts'], '"></span>';
 
 		echo '
-						</a>
-						<div class="board_row_contain">
-							<h3 class="board_name">
-								<a href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a>';
+					</a>
+					<div class="board_main">
+						<h3 class="board_name">
+							<a href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a>';
 
 		// Has it outstanding posts for approval? @todo - Might change presentation here.
 		if ($board['can_approve_posts'] && ($board['unapproved_posts'] || $board['unapproved_topics']))
 			echo '
-								<a href="', $scripturl, '?action=moderate;area=postmod;sa=', ($board['unapproved_topics'] > 0 ? 'topics' : 'posts'), ';brd=', $board['id'], ';', $context['session_var'], '=', $context['session_id'], '" title="', sprintf($txt['unapproved_posts'], $board['unapproved_topics'], $board['unapproved_posts']), '" class="moderation_link"><img class="icon" src="', $settings['images_url'], '/icons/field_invalid.png" alt="(!)" /></a>';
+							<a href="', $scripturl, '?action=moderate;area=postmod;sa=', ($board['unapproved_topics'] > 0 ? 'topics' : 'posts'), ';brd=', $board['id'], ';', $context['session_var'], '=', $context['session_id'], '" title="', sprintf($txt['unapproved_posts'], $board['unapproved_topics'], $board['unapproved_posts']), '" class="moderation_link"><i class="icon i-alert"></i></a>';
 
 		echo '
-							</h3>
-							<p class="board_description">', $board['description'], '</p>
-						</div>
-						<div class="board_stats">
-							<ul>
-								<li><strong>', comma_format($board['posts']), '</strong><br /><span class="smalltext">', $board['is_redirect'] ? $txt['redirects'] : $txt['posts'], '</span></li>
-								<li><strong>', comma_format($board['topics']), '</strong><br /><span class="smalltext">', $txt['board_topics'], '</span></li>
-							</ul>
-						</div>';
+						</h3>
+						<h4 class="board_description">', $board['description'], '</h4>
+					</div>';
 
 		// Show some basic information about the number of posts, etc.
 		echo '
-					</div>
+					<aside class="board_stats">
+						<ul>
+							<li>
+								<strong>', comma_format($board['posts']), '</strong><br />
+								<span class="smalltext">', $board['is_redirect'] ? $txt['redirects'] : $txt['posts'], '</span>
+							</li>
+							<li>
+								<strong>', comma_format($board['topics']), '</strong><br />
+								<span class="smalltext">', $txt['board_topics'], '</span>
+							</li>
+						</ul>
+					</aside>';
+
+		echo '
 					<div class="board_latest">';
 
 		if (!empty($board['last_post']['id']))
 		{
 			echo '
-						<p class="board_lastpost">';
-
-			echo '
-							', $board['last_post']['last_post_message'], '
-						</p>';
+						', $board['last_post']['last_post_message'];
 		}
 
 		echo '
@@ -179,7 +179,7 @@ function template_list_boards($boards, $id)
 
 				// Has it posts awaiting approval?
 				if ($child['can_approve_posts'] && ($child['unapproved_posts'] || $child['unapproved_topics']))
-					$child['link'] .= ' <a href="' . $scripturl . '?action=moderate;area=postmod;sa=' . ($child['unapproved_topics'] > 0 ? 'topics' : 'posts') . ';brd=' . $child['id'] . ';' . $context['session_var'] . '=' . $context['session_id'] . '" title="' . sprintf($txt['unapproved_posts'], $child['unapproved_topics'], $child['unapproved_posts']) . '" class="moderation_link"><img class="icon" src="' . $settings['images_url'] . '/icons/field_invalid.png" alt="(!)" /></a>';
+					$child['link'] .= ' <a href="' . $scripturl . '?action=moderate;area=postmod;sa=' . ($child['unapproved_topics'] > 0 ? 'topics' : 'posts') . ';brd=' . $child['id'] . ';' . $context['session_var'] . '=' . $context['session_id'] . '" title="' . sprintf($txt['unapproved_posts'], $child['unapproved_topics'], $child['unapproved_posts']) . '" class="moderation_link"><i class="icon i-alert"></i></a>';
 
 				$children[] = $child['link'];
 			}
@@ -219,13 +219,13 @@ function template_pick_boards($form_name, $input_names = 'brd', $select_all = tr
 
 	if ($select_all)
 		echo '
-						<h3 class="secondary_header">
-							<span id="category_toggle">&nbsp;
-								<span id="advanced_panel_toggle" class="', $context['boards_check_all'] ? 'expand' : 'collapse', '" style="display: none;" title="', $txt['hide'], '"></span>
+						<h3 class="secondary_header panel_toggle">
+							<span>
+								<span id="advanced_panel_toggle" class="chevricon i-chevron-', $context['boards_check_all'] ? 'down' : 'up', ' hide" title="', $txt['hide'], '"></span>
 							</span>
 							<a href="#" id="advanced_panel_link">', $txt['choose_board'], '</a>
 						</h3>
-						<div id="advanced_panel_div"', $context['boards_check_all'] ? ' style="display: none;"' : '', '>';
+						<div id="advanced_panel_div"', $context['boards_check_all'] ? ' class="hide"' : '', '>';
 
 	// Make two nice columns of boards, link each category header to toggle select all boards in each
 	$group_cats = optimizeBoardsSubdivision($context['boards_in_category'], $context['num_boards']);
@@ -247,7 +247,7 @@ function template_pick_boards($form_name, $input_names = 'brd', $select_all = tr
 				echo '
 										<li class="board" style="margin-', $context['right_to_left'] ? 'right' : 'left', ': ', $board['child_level'], 'em;">
 											<label for="', $input_names, $board['id'], '">
-												<input type="checkbox" id="', $input_names, $board['id'], '" name="', $input_names, '[', $board['id'], ']" value="', $board['id'], '"', $board['selected'] ? ' checked="checked"' : '', ' class="input_check" /> ', $board['name'], '
+												<input type="checkbox" id="', $input_names, $board['id'], '" name="', $input_names, '[', $board['id'], ']" value="', $board['id'], '"', $board['selected'] ? ' checked="checked"' : '', ' /> ', $board['name'], '
 											</label>
 										</li>';
 			}
@@ -267,7 +267,7 @@ function template_pick_boards($form_name, $input_names = 'brd', $select_all = tr
 						</div>
 						<div class="submitbutton">
 							<span class="floatleft">
-								<input type="checkbox" name="all" id="check_all" value=""', $context['boards_check_all'] ? ' checked="checked"' : '', ' onclick="invertAll(this, this.form, \'', $input_names, '\');" class="input_check" />
+								<input type="checkbox" name="all" id="check_all" value=""', $context['boards_check_all'] ? ' checked="checked"' : '', ' onclick="invertAll(this, this.form, \'', $input_names, '\');" />
 								<label for="check_all">
 									<em> ', $txt['check_all'], '</em>
 								</label>
@@ -286,9 +286,9 @@ function template_pick_boards($form_name, $input_names = 'brd', $select_all = tr
 			aSwapClasses: [
 				{
 					sId: \'advanced_panel_toggle\',
-					classExpanded: \'collapse\',
+					classExpanded: \'chevricon i-chevron-up\',
 					titleExpanded: ' . JavaScriptEscape($txt['hide']) . ',
-					classCollapsed: \'expand\',
+					classCollapsed: \'chevricon i-chevron-down\',
 					titleCollapsed: ' . JavaScriptEscape($txt['show']) . '
 				}
 			],
